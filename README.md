@@ -1,8 +1,7 @@
 # desarrollo_web_gabriel_rojas
 
-Se hizo un prototipo simple en HTML, CSS y JavaScript, sin backend ni almacenamiento real.
+Se hizo un prototipo en HTML, CSS y JavaScript, sin backend ni almacenamiento real.
 
-Las validaciones de formularios se hicieron en JavaScript y el listado e indicadores usan datos
-de ejemplo para mostrar la interfaz pedida.
+Como la tarea pide un prototipo y no guardar información, el listado y los indicadores usan datos de ejemplo para mostrar la interfaz y el funcionamiento esperado.
 
-Git no permite ramas con espacios, por eso se usó `Tarea-1`.
+Las validaciones de los formularios se hicieron en JavaScript.
