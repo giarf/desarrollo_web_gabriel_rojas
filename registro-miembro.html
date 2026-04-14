@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Miembro</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Registro de miembro</h1>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="registro-miembro.html">Registrar miembro</a>
+        <a href="registro-actividad.html">Registrar actividad</a>
+        <a href="listado-miembros.html">Listado</a>
+        <a href="estadisticas.html">Indicadores</a>
+      </nav>
+    </header>
+
+    <main>
+      <form id="member-form" novalidate>
+        <label for="nombre">Nombre completo *</label>
+        <input id="nombre" type="text">
+
+        <label for="correo">Correo *</label>
+        <input id="correo" type="email">
+
+        <label for="telefono">Teléfono *</label>
+        <input id="telefono" type="text">
+
+        <label for="tipo">Tipo de miembro *</label>
+        <select id="tipo">
+          <option value="">Seleccione</option>
+          <option value="pregrado">Pregrado</option>
+          <option value="postgrado">Postgrado</option>
+          <option value="funcionario">Funcionario</option>
+          <option value="academico">Académico</option>
+        </select>
+
+        <label for="dato-extra" id="extra-label">Dato específico *</label>
+        <input id="dato-extra" type="text">
+
+        <button type="submit">Validar</button>
+      </form>
+
+      <section id="member-box" class="box" hidden>
+        <h2>Resultado</h2>
+        <ul id="member-errors"></ul>
+        <p id="member-ok"></p>
+      </section>
+    </main>
+
+    <script src="js/registro-miembro.js"></script>
+  </body>
+</html>

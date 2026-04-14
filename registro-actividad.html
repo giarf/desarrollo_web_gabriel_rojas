@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Actividad</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Registro de actividad</h1>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="registro-miembro.html">Registrar miembro</a>
+        <a href="registro-actividad.html">Registrar actividad</a>
+        <a href="listado-miembros.html">Listado</a>
+        <a href="estadisticas.html">Indicadores</a>
+      </nav>
+    </header>
+
+    <main>
+      <form id="activity-form" novalidate>
+        <label for="miembro">Miembro *</label>
+        <select id="miembro">
+          <option value="">Seleccione</option>
+          <option value="1">Ana Torres</option>
+          <option value="2">Luis Rojas</option>
+          <option value="3">María Soto</option>
+          <option value="4">Pablo Díaz</option>
+        </select>
+
+        <label for="actividad">Nombre de la actividad *</label>
+        <input id="actividad" type="text">
+
+        <label for="categoria">Tipo de actividad *</label>
+        <select id="categoria">
+          <option value="">Seleccione</option>
+          <option value="artistica">Artística</option>
+          <option value="deportiva">Deportiva</option>
+          <option value="tecnologica">Tecnológica</option>
+          <option value="social">Social</option>
+          <option value="recreativa">Recreativa</option>
+        </select>
+
+        <label for="dia">Día *</label>
+        <select id="dia">
+          <option value="">Seleccione</option>
+          <option value="lunes">Lunes</option>
+          <option value="martes">Martes</option>
+          <option value="miercoles">Miércoles</option>
+          <option value="jueves">Jueves</option>
+          <option value="viernes">Viernes</option>
+        </select>
+
+        <label for="inicio">Hora inicio *</label>
+        <input id="inicio" type="time">
+
+        <label for="termino">Hora término *</label>
+        <input id="termino" type="time">
+
+        <label for="archivo">Foto o video *</label>
+        <input id="archivo" type="file" accept="image/*,video/*">
+
+        <label for="enlace">Enlace propio *</label>
+        <input id="enlace" type="url" placeholder="https://">
+
+        <button type="submit">Validar</button>
+      </form>
+
+      <section id="activity-box" class="box" hidden>
+        <h2>Resultado</h2>
+        <ul id="activity-errors"></ul>
+        <p id="activity-ok"></p>
+      </section>
+    </main>
+
+    <script src="js/registro-actividad.js"></script>
+  </body>
+</html>

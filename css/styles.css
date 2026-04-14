@@ -1,0 +1,55 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 0 10px;
+}
+
+nav {
+  margin-bottom: 20px;
+}
+
+nav a {
+  margin-right: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  max-width: 500px;
+  padding: 6px;
+  margin-top: 4px;
+}
+
+button {
+  margin-top: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th,
+td {
+  border: 1px solid #cccccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.box {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #cccccc;
+}
+
+.error {
+  border-color: red;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Miembros</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Listado de miembros</h1>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="registro-miembro.html">Registrar miembro</a>
+        <a href="registro-actividad.html">Registrar actividad</a>
+        <a href="listado-miembros.html">Listado</a>
+        <a href="estadisticas.html">Indicadores</a>
+      </nav>
+    </header>
+
+    <main>
+      <label for="filtro">Filtrar por tipo</label>
+      <select id="filtro">
+        <option value="">Todos</option>
+        <option value="pregrado">Pregrado</option>
+        <option value="postgrado">Postgrado</option>
+        <option value="funcionario">Funcionario</option>
+        <option value="academico">Académico</option>
+      </select>
+
+      <label for="orden">Ordenar por</label>
+      <select id="orden">
+        <option value="nombre">Nombre</option>
+        <option value="correo">Correo</option>
+        <option value="telefono">Teléfono</option>
+      </select>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-miembros"></tbody>
+      </table>
+
+      <p id="pagina-texto"></p>
+      <button id="anterior" type="button">Anterior</button>
+      <button id="siguiente" type="button">Siguiente</button>
+    </main>
+
+    <script src="js/datos.js"></script>
+    <script src="js/listado.js"></script>
+  </body>
+</html>

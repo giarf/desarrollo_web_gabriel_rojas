@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicadores</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Indicadores</h1>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="registro-miembro.html">Registrar miembro</a>
+        <a href="registro-actividad.html">Registrar actividad</a>
+        <a href="listado-miembros.html">Listado</a>
+        <a href="estadisticas.html">Indicadores</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Miembros por tipo</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-miembros-tipo"></tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Actividades por tipo</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-actividades-tipo"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="js/datos.js"></script>
+    <script src="js/estadisticas.js"></script>
+  </body>
+</html>
