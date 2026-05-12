@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar - Actividades DCC{% endblock %}
+
+{% block content %}
+  <h2>Registrar miembro y actividades</h2>
+
+  {% if errors %}
+    <section class="box error-box">
+      <h3>Revise los siguientes errores</h3>
+      <ul>
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  <form id="register-form" method="post" enctype="multipart/form-data" novalidate>
+    <fieldset>
+      <legend>Datos del miembro</legend>
+
+      <label for="nombre">Nombre completo *</label>
+      <input id="nombre" name="nombre" type="text" value="{{ form.get('nombre', '') if form else '' }}">
+
+      <label for="email">Correo *</label>
+      <input id="email" name="email" type="email" value="{{ form.get('email', '') if form else '' }}">
+
+      <label for="telefono">Teléfono *</label>
+      <input id="telefono" name="telefono" type="text" value="{{ form.get('telefono', '') if form else '' }}">
+
+      <label for="comuna_id">Comuna *</label>
+      <select id="comuna_id" name="comuna_id">
+        <option value="">Seleccione</option>
+        {% for comuna in comunas %}
+          <option value="{{ comuna.id }}" {% if form and form.get('comuna_id') == comuna.id|string %}selected{% endif %}>{{ comuna.nombre }} - {{ comuna.region.nombre }}</option>
+        {% endfor %}
+      </select>
+    </fieldset>
+
+    <section id="activities">
+      <h3>Actividades</h3>
+      <fieldset class="activity-block">
+        <legend>Actividad 1</legend>
+
+        <label>Nombre de la actividad *</label>
+        <input name="actividad_nombre[]" type="text">
+
+        <label>Día *</label>
+        <select name="dia[]">
+          <option value="">Seleccione</option>
+          <option value="lunes">Lunes</option>
+          <option value="martes">Martes</option>
+          <option value="miércoles">Miércoles</option>
+          <option value="jueves">Jueves</option>
+          <option value="viernes">Viernes</option>
+          <option value="sábado">Sábado</option>
+          <option value="domingo">Domingo</option>
+        </select>
+
+        <label>Hora inicio *</label>
+        <input name="hora_inicio[]" type="time">
+
+        <label>Duración *</label>
+        <input name="duracion[]" type="text" placeholder="HH:MM">
+
+        <label>Tipo *</label>
+        <select name="tipo[]">
+          <option value="">Seleccione</option>
+          <option value="arte">Arte</option>
+          <option value="deporte">Deporte</option>
+          <option value="tecnología">Tecnología</option>
+          <option value="social">Social</option>
+          <option value="recreación">Recreación</option>
+          <option value="otra">Otra</option>
+        </select>
+
+        <label>Descripción</label>
+        <textarea name="descripcion[]" rows="4"></textarea>
+
+        <label>Fotos *</label>
+        <input name="foto_0[]" type="file" accept="image/*" multiple>
+      </fieldset>
+    </section>
+
+    <button id="add-activity" type="button">Agregar otra actividad</button>
+    <button type="submit">Registrar</button>
+  </form>
+
+  <section id="client-errors" class="box error-box" hidden>
+    <h3>Errores de validación</h3>
+    <ul></ul>
+  </section>
+
+  <script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+{% endblock %}

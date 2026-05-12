@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Actividades DCC{% endblock %}
+
+{% block content %}
+  <section>
+    <h2>Bienvenida</h2>
+    <p>Este sistema permite registrar miembros de la comunidad, informar sus actividades y revisar los listados guardados en la base de datos.</p>
+  </section>
+
+  <section>
+    <h2>Opciones</h2>
+    <ul>
+      <li><a href="{{ url_for('registrar') }}">Registrar miembro y actividades</a></li>
+      <li><a href="{{ url_for('miembros') }}">Ver listado de miembros</a></li>
+      <li><a href="{{ url_for('estadisticas') }}">Estadísticas</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Últimos 5 miembros agregados</h2>
+    {% if miembros %}
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Comuna</th>
+            <th>Fecha registro</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for miembro in miembros %}
+            <tr>
+              <td><a href="{{ url_for('detalle_miembro', member_id=miembro.id) }}">{{ miembro.nombre }}</a></td>
+              <td>{{ miembro.email }}</td>
+              <td>{{ miembro.telefono }}</td>
+              <td>{{ miembro.comuna.nombre }}</td>
+              <td>{{ miembro.fecha_registro.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No hay miembros registrados todavía.</p>
+    {% endif %}
+  </section>
+{% endblock %}

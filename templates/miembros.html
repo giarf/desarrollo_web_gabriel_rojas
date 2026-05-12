@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Listado - Actividades DCC{% endblock %}
+
+{% block content %}
+  <h2>Listado de miembros</h2>
+  {% if miembros %}
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Comuna</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for miembro in miembros %}
+          <tr class="clickable-row" onclick="window.location='{{ url_for('detalle_miembro', member_id=miembro.id) }}'">
+            <td>{{ miembro.nombre }}</td>
+            <td>{{ miembro.email }}</td>
+            <td>{{ miembro.telefono }}</td>
+            <td>{{ miembro.comuna.nombre }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay miembros registrados.</p>
+  {% endif %}
+
+  <p>Página {{ page }} de {{ total_pages }}</p>
+  <div class="pager">
+    {% if page > 1 %}
+      <a class="button-link" href="{{ url_for('miembros', page=page - 1) }}">Anterior</a>
+    {% endif %}
+    {% if page < total_pages %}
+      <a class="button-link" href="{{ url_for('miembros', page=page + 1) }}">Siguiente</a>
+    {% endif %}
+  </div>
+{% endblock %}

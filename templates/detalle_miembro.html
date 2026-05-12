@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle - Actividades DCC{% endblock %}
+
+{% block content %}
+  <h2>{{ miembro.nombre }}</h2>
+  <section class="box">
+    <p><strong>Correo:</strong> {{ miembro.email }}</p>
+    <p><strong>Teléfono:</strong> {{ miembro.telefono }}</p>
+    <p><strong>Comuna:</strong> {{ miembro.comuna.nombre }}</p>
+    <p><strong>Región:</strong> {{ miembro.comuna.region.nombre }}</p>
+    <p><strong>Fecha registro:</strong> {{ miembro.fecha_registro.strftime('%Y-%m-%d %H:%M') }}</p>
+  </section>
+
+  <h3>Actividades</h3>
+  {% for actividad in miembro.actividades %}
+    <article class="box">
+      <h4>{{ actividad.nombre }}</h4>
+      <p><strong>Tipo:</strong> {{ actividad.tipo }}</p>
+      <p><strong>Día:</strong> {{ actividad.dia }}</p>
+      <p><strong>Hora inicio:</strong> {{ actividad.hora_inicio }}</p>
+      <p><strong>Duración:</strong> {{ actividad.duracion }}</p>
+      {% if actividad.descripcion %}
+        <p><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
+      {% endif %}
+      <div class="photos">
+        {% for foto in actividad.fotos %}
+          <img src="{{ url_for('static', filename='uploads/' ~ foto.nombre_archivo) }}" alt="Foto de {{ actividad.nombre }}">
+        {% endfor %}
+      </div>
+    </article>
+  {% else %}
+    <p>Este miembro no tiene actividades registradas.</p>
+  {% endfor %}
+{% endblock %}

@@ -1,13 +1,13 @@
-import os
+from datetime import datetime
 
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text, create_engine
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text, create_engine, desc
+from sqlalchemy.orm import declarative_base, joinedload, relationship, sessionmaker
 
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
 DB_PASSWORD = "programacionweb"
-DB_HOST = os.environ.get("TAREA2_DB_HOST", "localhost")
+DB_HOST = "localhost"
 DB_PORT = 3306
 
 DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -80,3 +80,117 @@ class Foto(Base):
 
 def get_session():
     return SessionLocal()
+
+
+def get_regiones():
+    session = get_session()
+    regiones = session.query(Region).order_by(Region.id).all()
+    session.close()
+    return regiones
+
+
+def get_comunas():
+    session = get_session()
+    comunas = session.query(Comuna).options(joinedload(Comuna.region)).order_by(Comuna.nombre).all()
+    session.close()
+    return comunas
+
+
+def get_comuna_by_id(comuna_id):
+    session = get_session()
+    comuna = session.query(Comuna).filter_by(id=comuna_id).first()
+    session.close()
+    return comuna
+
+
+def get_last_members(limit=5):
+    session = get_session()
+    members = (
+        session.query(Miembro)
+        .options(joinedload(Miembro.comuna).joinedload(Comuna.region))
+        .order_by(desc(Miembro.fecha_registro), desc(Miembro.id))
+        .limit(limit)
+        .all()
+    )
+    session.close()
+    return members
+
+
+def count_members():
+    session = get_session()
+    total = session.query(Miembro).count()
+    session.close()
+    return total
+
+
+def get_members_page(page=1, page_size=5):
+    session = get_session()
+    members = (
+        session.query(Miembro)
+        .options(joinedload(Miembro.comuna).joinedload(Comuna.region))
+        .order_by(Miembro.nombre)
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+    session.close()
+    return members
+
+
+def get_member_detail(member_id):
+    session = get_session()
+    member = (
+        session.query(Miembro)
+        .options(
+            joinedload(Miembro.comuna).joinedload(Comuna.region),
+            joinedload(Miembro.actividades).joinedload(Actividad.fotos),
+        )
+        .filter_by(id=member_id)
+        .first()
+    )
+    session.close()
+    return member
+
+
+def create_member_with_activities(member_data, activities_data):
+    session = get_session()
+    try:
+        member = Miembro(
+            nombre=member_data["nombre"],
+            email=member_data["email"],
+            telefono=member_data["telefono"],
+            comuna_id=member_data["comuna_id"],
+            fecha_registro=datetime.now(),
+        )
+        session.add(member)
+        session.flush()
+
+        for activity_data in activities_data:
+            activity = Actividad(
+                miembro_id=member.id,
+                dia=activity_data["dia"],
+                hora_inicio=activity_data["hora_inicio"],
+                duracion=activity_data["duracion"],
+                tipo=activity_data["tipo"],
+                nombre=activity_data["nombre"],
+                descripcion=activity_data.get("descripcion") or None,
+            )
+            session.add(activity)
+            session.flush()
+
+            for photo_data in activity_data["fotos"]:
+                session.add(
+                    Foto(
+                        ruta_archivo=photo_data["ruta_archivo"],
+                        nombre_archivo=photo_data["nombre_archivo"],
+                        actividad_id=activity.id,
+                    )
+                )
+
+        session.commit()
+        return True, member.id
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
