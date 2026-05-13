@@ -1,8 +1,8 @@
 import os
 import uuid
 
+import filetype
 from flask import Flask, flash, redirect, render_template, request, url_for
-from werkzeug.utils import secure_filename
 
 from database import db
 from utils.validations import validate_activities, validate_member
@@ -22,8 +22,9 @@ def save_activity_photos(activities):
     for activity in activities:
         saved_photos = []
         for photo in activity["fotos"]:
-            filename = secure_filename(photo.filename)
-            extension = filename.rsplit(".", 1)[-1].lower()
+            file_type = filetype.guess(photo)
+            photo.seek(0)
+            extension = file_type.extension
             stored_name = f"{uuid.uuid4()}.{extension}"
             photo.save(os.path.join(app.config["UPLOAD_FOLDER"], stored_name))
             saved_photos.append({

@@ -1,5 +1,7 @@
 import re
 
+import filetype
+
 
 VALID_DAYS = {"lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"}
 VALID_TYPES = {"arte", "deporte", "tecnología", "social", "recreación", "otra"}
@@ -23,8 +25,10 @@ def validate_member(nombre, email, telefono, comuna_id):
 def validate_photo(photo):
     if photo is None or photo.filename == "":
         return "Debe agregar al menos una foto por actividad."
-    extension = photo.filename.rsplit(".", 1)[-1].lower() if "." in photo.filename else ""
-    if extension not in ALLOWED_EXTENSIONS or photo.mimetype not in ALLOWED_MIMETYPES:
+
+    file_type = filetype.guess(photo)
+    photo.seek(0)
+    if file_type is None or file_type.extension not in ALLOWED_EXTENSIONS or file_type.mime not in ALLOWED_MIMETYPES:
         return "Las fotos deben ser imagenes png, jpg, jpeg, gif o webp."
     return None
 
