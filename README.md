@@ -19,8 +19,6 @@ mysql -u cc5002 -p < tarea2.sql
 mysql -u cc5002 -p tarea2 < region-comuna.sql
 ```
 
-Si se trabaja con una base remota, se espera tener un reenvio de puerto local para que `localhost:3306` apunte al MySQL remoto.
-
 ## Ejecucion
 
 ```bash
