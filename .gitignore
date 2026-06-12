@@ -3,3 +3,8 @@ create_db.sql
 static/uploads/
 __pycache__/
 *.pyc
+.DS_Store
+*.pdf
+*.zip
+correccion.md
+transcripcion.md

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text, create_engine, desc
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Text, create_engine, desc, func
 from sqlalchemy.orm import declarative_base, joinedload, relationship, sessionmaker
 
 
@@ -65,6 +65,7 @@ class Actividad(Base):
 
     miembro = relationship("Miembro", back_populates="actividades")
     fotos = relationship("Foto", back_populates="actividad", cascade="all, delete")
+    comentarios = relationship("Comentario", back_populates="actividad", cascade="all, delete")
 
 
 class Foto(Base):
@@ -76,6 +77,18 @@ class Foto(Base):
     actividad_id = Column(Integer, ForeignKey("actividad.id"), nullable=False)
 
     actividad = relationship("Actividad", back_populates="fotos")
+
+
+class Comentario(Base):
+    __tablename__ = "comentario"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String(80), nullable=False)
+    texto = Column(String(300), nullable=False)
+    fecha = Column(DateTime, nullable=False)
+    actividad_id = Column(Integer, ForeignKey("actividad.id"), nullable=False)
+
+    actividad = relationship("Actividad", back_populates="comentarios")
 
 
 def get_session():
@@ -152,6 +165,13 @@ def get_member_detail(member_id):
     return member
 
 
+def get_activity_by_id(activity_id):
+    session = get_session()
+    activity = session.query(Actividad).filter_by(id=activity_id).first()
+    session.close()
+    return activity
+
+
 def create_member_with_activities(member_data, activities_data):
     session = get_session()
     try:
@@ -194,3 +214,82 @@ def create_member_with_activities(member_data, activities_data):
         raise
     finally:
         session.close()
+
+
+def get_members_by_day_stats():
+    session = get_session()
+    rows = (
+        session.query(func.date(Miembro.fecha_registro), func.count(Miembro.id))
+        .group_by(func.date(Miembro.fecha_registro))
+        .order_by(func.date(Miembro.fecha_registro))
+        .all()
+    )
+    session.close()
+    return [{"date": row[0].strftime("%Y-%m-%d"), "count": row[1]} for row in rows]
+
+
+def get_activities_by_type_stats():
+    session = get_session()
+    rows = (
+        session.query(Actividad.tipo, func.count(Actividad.id))
+        .group_by(Actividad.tipo)
+        .order_by(Actividad.tipo)
+        .all()
+    )
+    session.close()
+    return [{"type": row[0], "count": row[1]} for row in rows]
+
+
+def get_activities_by_comuna_stats():
+    session = get_session()
+    rows = (
+        session.query(Comuna.nombre, func.count(Actividad.id))
+        .join(Miembro, Miembro.comuna_id == Comuna.id)
+        .join(Actividad, Actividad.miembro_id == Miembro.id)
+        .group_by(Comuna.id, Comuna.nombre)
+        .order_by(Comuna.nombre)
+        .all()
+    )
+    session.close()
+    return [{"comuna": row[0], "count": row[1]} for row in rows]
+
+
+def get_comments_by_activity(activity_id):
+    session = get_session()
+    comments = (
+        session.query(Comentario)
+        .filter_by(actividad_id=activity_id)
+        .order_by(desc(Comentario.fecha), desc(Comentario.id))
+        .all()
+    )
+    data = [
+        {
+            "id": comment.id,
+            "nombre": comment.nombre,
+            "texto": comment.texto,
+            "fecha": comment.fecha.strftime("%Y-%m-%d %H:%M"),
+        }
+        for comment in comments
+    ]
+    session.close()
+    return data
+
+
+def create_comment(activity_id, nombre, texto):
+    session = get_session()
+    comment = Comentario(
+        actividad_id=activity_id,
+        nombre=nombre,
+        texto=texto,
+        fecha=datetime.now(),
+    )
+    session.add(comment)
+    session.commit()
+    comment_data = {
+        "id": comment.id,
+        "nombre": comment.nombre,
+        "texto": comment.texto,
+        "fecha": comment.fecha.strftime("%Y-%m-%d %H:%M"),
+    }
+    session.close()
+    return comment_data

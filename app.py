@@ -2,10 +2,10 @@ import os
 import uuid
 
 import filetype
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 
 from database import db
-from utils.validations import validate_activities, validate_member
+from utils.validations import validate_activities, validate_comment, validate_member
 
 
 UPLOAD_FOLDER = os.path.join("static", "uploads")
@@ -103,6 +103,44 @@ def detalle_miembro(member_id):
 @app.route("/estadisticas", methods=["GET"])
 def estadisticas():
     return render_template("estadisticas.html")
+
+
+@app.route("/api/estadisticas/miembros-por-dia", methods=["GET"])
+def estadisticas_miembros_por_dia():
+    return jsonify(db.get_members_by_day_stats())
+
+
+@app.route("/api/estadisticas/actividades-por-tipo", methods=["GET"])
+def estadisticas_actividades_por_tipo():
+    return jsonify(db.get_activities_by_type_stats())
+
+
+@app.route("/api/estadisticas/actividades-por-comuna", methods=["GET"])
+def estadisticas_actividades_por_comuna():
+    return jsonify(db.get_activities_by_comuna_stats())
+
+
+@app.route("/api/actividades/<int:activity_id>/comentarios", methods=["GET"])
+def comentarios_actividad(activity_id):
+    if not db.get_activity_by_id(activity_id):
+        return jsonify({"status": "error", "errors": ["La actividad no existe."]}), 404
+    return jsonify({"status": "ok", "data": db.get_comments_by_activity(activity_id)})
+
+
+@app.route("/api/actividades/<int:activity_id>/comentarios", methods=["POST"])
+def agregar_comentario(activity_id):
+    if not db.get_activity_by_id(activity_id):
+        return jsonify({"status": "error", "errors": ["La actividad no existe."]}), 404
+
+    data = request.get_json(silent=True) or {}
+    nombre = data.get("nombre", "").strip()
+    texto = data.get("texto", "").strip()
+    errors = validate_comment(nombre, texto)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 400
+
+    comment = db.create_comment(activity_id, nombre, texto)
+    return jsonify({"status": "ok", "data": comment}), 201
 
 
 if __name__ == "__main__":

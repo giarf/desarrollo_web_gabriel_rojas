@@ -4,5 +4,22 @@
 
 {% block content %}
   <h2>Estadísticas</h2>
-  <p>Las funcionalidades de indicadores y métricas quedan pendientes para la siguiente tarea.</p>
+  <section class="box chart-box">
+    <div id="miembros-dia-chart"></div>
+  </section>
+
+  <section class="box chart-box">
+    <div id="actividades-tipo-chart"></div>
+  </section>
+
+  <section class="box chart-box">
+    <div id="actividades-comuna-chart"></div>
+  </section>
+
+  <p><a href="{{ url_for('index') }}">Volver a la portada</a></p>
+{% endblock %}
+
+{% block javascript %}
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="{{ url_for('static', filename='js/estadisticas.js') }}"></script>
 {% endblock %}

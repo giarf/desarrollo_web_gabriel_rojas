@@ -103,6 +103,31 @@ td {
   border: 1px solid #cccccc;
 }
 
+.chart-box {
+  min-height: 360px;
+}
+
+.comment-section {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #dddddd;
+}
+
+.comment-section h5 {
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+.comment-messages {
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid transparent;
+}
+
+.comments-list {
+  margin-bottom: 14px;
+}
+
 @media (max-width: 700px) {
   table,
   thead,

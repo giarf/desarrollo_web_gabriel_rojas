@@ -28,8 +28,28 @@
           <img src="{{ url_for('static', filename='uploads/' ~ foto.nombre_archivo) }}" alt="Foto de {{ actividad.nombre }}">
         {% endfor %}
       </div>
+
+      <section class="comment-section" data-actividad-id="{{ actividad.id }}">
+        <h5>Comentarios</h5>
+        <div class="comment-messages" aria-live="polite"></div>
+        <div class="comments-list">Cargando comentarios...</div>
+
+        <form class="comment-form" novalidate>
+          <label for="comentario-nombre-{{ actividad.id }}">Nombre comentarista</label>
+          <input id="comentario-nombre-{{ actividad.id }}" name="nombre" type="text" minlength="3" maxlength="80" required>
+
+          <label for="comentario-texto-{{ actividad.id }}">Texto del comentario</label>
+          <textarea id="comentario-texto-{{ actividad.id }}" name="texto" rows="4" cols="50" minlength="5" maxlength="300" required></textarea>
+
+          <button type="submit">Agregar comentario</button>
+        </form>
+      </section>
     </article>
   {% else %}
     <p>Este miembro no tiene actividades registradas.</p>
   {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+  <script src="{{ url_for('static', filename='js/comentarios.js') }}"></script>
 {% endblock %}

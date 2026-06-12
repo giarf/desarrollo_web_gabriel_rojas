@@ -91,3 +91,16 @@ def validate_activities(form, files):
         })
 
     return errors, activities
+
+
+def validate_comment(nombre, texto):
+    errors = []
+    nombre = nombre.strip() if nombre else ""
+    texto = texto.strip() if texto else ""
+
+    if len(nombre) < 3 or len(nombre) > 80:
+        errors.append("El nombre debe tener entre 3 y 80 caracteres.")
+    if len(texto) < 5 or len(texto) > 300:
+        errors.append("El comentario debe tener entre 5 y 300 caracteres.")
+
+    return errors
