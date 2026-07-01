@@ -1,50 +1,89 @@
-# Tarea 3 - Actividades DCC
+# Tarea 4 - CC5002
 
-Aplicacion Flask para registrar miembros y actividades usando MySQL y SQLAlchemy.
+Aplicacion Spring Boot para buscar actividades extraprogramaticas y evaluarlas con notas entre 1 y 7.
+
+## Requisitos
+
+- Java 17 o superior.
+- MySQL corriendo localmente o con Docker Compose.
+- Base de datos `tarea2`, la misma usada por las tareas anteriores.
+- Usuario MySQL `cc5002` con password `programacionweb`.
+
+La configuracion esta en `src/main/resources/application.properties`. La aplicacion se conecta a MySQL en `localhost:3306/tarea2`.
 
 ## Base de datos
 
-La aplicacion usa las credenciales pedidas en el enunciado:
+Ejecutar los SQL en este orden:
 
-- host: `localhost`
-- puerto: `3306`
-- base de datos: `tarea2`
-- usuario: `cc5002`
-- password: `programacionweb`
+1. `tarea2.sql`: crea el esquema `tarea2` y las tablas originales.
+2. `region-comuna.sql`: carga regiones y comunas.
+3. `tabla-comentario.sql`: mantiene compatibilidad con la tabla de comentarios de la tarea anterior.
+4. `tabla-nota.sql`: crea la tabla `nota` usada en esta tarea.
 
-Para crear tablas y cargar comunas/regiones:
+La tabla `nota` guarda cada evaluacion en una fila independiente. La nota mostrada en pantalla corresponde al promedio de las notas de la actividad; si una actividad no tiene notas, se muestra `-`.
+
+## Ejecucion
+
+La base puede levantarse desde la carpeta `../tarea2`:
+
+```bash
+cd ../tarea2
+docker compose up -d
+```
+
+Para agregar la tabla nueva de esta tarea en el contenedor de Tarea 2:
+
+```bash
+cd ../tarea4
+docker exec -i tarea2-appweb2-1 mysql -u root -proot tarea2 < tabla-nota.sql
+```
+
+Si necesitas crear la base desde cero con MySQL instalado directamente:
 
 ```bash
 mysql -u cc5002 -p < tarea2.sql
 mysql -u cc5002 -p tarea2 < region-comuna.sql
 mysql -u cc5002 -p tarea2 < tabla-comentario.sql
+mysql -u cc5002 -p tarea2 < tabla-nota.sql
 ```
 
-## Ejecucion
+Luego iniciar la aplicacion:
 
 ```bash
-pip install -r requirements.txt
-python app.py
+./mvnw spring-boot:run
 ```
 
-La aplicacion guarda las fotos subidas en `static/uploads/`, carpeta ignorada por Git.
+Si no existe `mvnw`, usar Maven instalado:
 
-## Estadisticas y comentarios
+```bash
+mvn spring-boot:run
+```
 
-La pantalla `/estadisticas` usa Highcharts desde CDN y carga los datos con `fetch` desde URLs JSON de Flask:
+Luego abrir:
 
-- `/api/estadisticas/miembros-por-dia`
-- `/api/estadisticas/actividades-por-tipo`
-- `/api/estadisticas/actividades-por-comuna`
+```text
+http://localhost:8080/buscar
+```
 
-Los comentarios de cada actividad tambien usan `fetch`:
+## Funcionalidades implementadas
 
-- `GET /api/actividades/<id>/comentarios` lista comentarios.
-- `POST /api/actividades/<id>/comentarios` valida e inserta un comentario.
+- Busqueda asincrona con `fetch` desde 3 caracteres.
+- Busca por nombre de actividad, descripcion o nombre de comuna.
+- Muestra miembro, dia, tipo, comuna, nombre, descripcion y nota.
+- Resalta el texto que calza con la busqueda.
+- Muestra mensaje cuando no hay resultados.
+- Permite evaluar una actividad con una nota entera entre 1 y 7.
+- Valida la nota en frontend y backend.
+- Guarda la nota con JPA en la tabla `nota`.
+- Recalcula y actualiza la nota promedio en la interfaz sin recargar la pagina.
+
+## Endpoints
+
+- `GET /api/actividades/buscar?q=texto`: retorna las actividades que calzan con la busqueda.
+- `POST /api/actividades/{id}/notas`: recibe el parametro de formulario `nota=7`, guarda la nota y retorna el nuevo promedio.
 
 ## Decisiones
 
-- Se reutilizo la estructura simple de las auxiliares con `database/db.py`, `SessionLocal` y modelos SQLAlchemy.
-- El formulario de registro une miembro, actividades y fotos porque el enunciado pide registrar miembro y actividades en un mismo flujo.
-- Los graficos se generan en el cliente, siguiendo el ejemplo de la auxiliar con Highcharts y `fetch`.
-- Los comentarios se validan en JavaScript y tambien en Flask antes de insertar en la base de datos.
+- Se implemento solo lo pedido para Tarea 4, sin portar pantallas anteriores que no son requeridas por el enunciado.
+- `spring.jpa.hibernate.ddl-auto=none` porque las tablas se crean desde los SQL entregados.
+- Se usa la misma base `tarea2` de las tareas previas y se agrega solamente la tabla `nota`.

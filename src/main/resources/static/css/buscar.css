@@ -16,12 +16,6 @@ nav a,
   margin: 0 10px 8px 0;
 }
 
-fieldset {
-  border: 1px solid #cccccc;
-  margin: 18px 0;
-  padding: 14px;
-}
-
 label {
   display: block;
   margin-top: 10px;
@@ -45,6 +39,10 @@ button,
   padding: 8px 12px;
 }
 
+.status {
+  min-height: 24px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -58,74 +56,28 @@ td {
   text-align: left;
 }
 
-.box {
+.box,
+.activity-card {
   margin-top: 20px;
   padding: 12px;
   border: 1px solid #cccccc;
 }
 
-.error,
-.error-box {
-  border-color: #cc0000;
+.activity-meta {
+  margin: 10px 0;
 }
 
-.error-box {
-  color: #990000;
+.activity-meta span {
+  display: block;
+  margin-bottom: 4px;
 }
 
-.ok-box {
-  border-color: #248a24;
-  color: #176317;
+.grade-row {
+  margin-top: 10px;
 }
 
-.clickable-row {
-  cursor: pointer;
-}
-
-.clickable-row:hover {
-  background: #f2f2f2;
-}
-
-.pager {
-  margin-top: 16px;
-}
-
-.photos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.photos img {
-  max-width: 180px;
-  max-height: 180px;
-  object-fit: cover;
-  border: 1px solid #cccccc;
-}
-
-.chart-box {
-  min-height: 360px;
-}
-
-.comment-section {
-  margin-top: 18px;
-  padding-top: 12px;
-  border-top: 1px solid #dddddd;
-}
-
-.comment-section h5 {
-  font-size: 1rem;
-  margin: 0 0 8px;
-}
-
-.comment-messages {
-  margin: 8px 0;
-  padding: 8px;
-  border: 1px solid transparent;
-}
-
-.comments-list {
-  margin-bottom: 14px;
+mark {
+  background: #ffff66;
 }
 
 @media (max-width: 700px) {

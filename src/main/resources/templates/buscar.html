@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades DCC</title>
+    <link rel="stylesheet" href="/css/buscar.css">
+</head>
+<body>
+    <header>
+        <h1>Actividades DCC</h1>
+        <nav>
+            <a href="/buscar">Buscador de actividades</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Buscador de actividades</h2>
+        <p>Escribe al menos 3 caracteres para buscar por nombre, descripcion o comuna.</p>
+
+        <form id="search-form" class="search-form">
+            <label for="search-input">Buscar actividad</label>
+            <input id="search-input" name="q" type="text" minlength="3" autocomplete="off" placeholder="Ej: futbol, Python, Arica">
+        </form>
+
+        <p id="status" class="status">Ingresa 3 caracteres para comenzar.</p>
+        <section id="results" aria-live="polite"></section>
+    </main>
+    <script src="/js/buscar.js"></script>
+</body>
+</html>

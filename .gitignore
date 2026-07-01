@@ -8,3 +8,7 @@ __pycache__/
 *.zip
 correccion.md
 transcripcion.md
+target/
+.idea/
+.vscode/
+*.class
